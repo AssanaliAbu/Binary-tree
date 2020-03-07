@@ -1,0 +1,97 @@
+#ifndef TREE_H_
+#define TREE_H_
+
+#include <ostream>
+
+struct node {
+	// Value of this node
+	int value;
+	// # of nodes in this subtree, counting this node.	
+	size_t size;
+	// Pointers to the left and right children.
+	node *left, *right;
+	// Pointer to the parent node.
+	// (nullptr if this is the root).
+	node *parent;
+
+	node (int x) : value (x), size (1),
+		left (nullptr), right (nullptr),
+		parent (nullptr) { }	
+};
+
+// Insert an item into the subtree rooted at "root".	
+// If x is already in the tree, it does nothing.
+// Returns the new root.
+// Should take time O(depth).
+node* insert (node *root, int x);
+
+// Erases the node containing value "x" fromt the subtree rooted at "root".
+// Returns the new root.
+// Should take time O(depth).
+node* erase (node *root, int x);
+
+// Searches for a node with value "x" in the subtree rooted at "root",
+// and returns a pointer to such node if found. 
+// Else it returns nullptr.
+// Should take time O(depth).
+node* find (node *root, int x);
+
+// Frees all nodes in the subtree rooted at "root".
+// Should take time O(n).
+void clear (node *root);
+
+// Makes a copy of the subtree rooted at "root", returns a pointer to the new root.
+// Should take time O(n).
+node* copy (node *root);
+
+// Finds the minimum of subtree rooted at "root".
+// Should take time O(depth).
+node* find_min (node *root);
+
+// Finds the maximum of subtree rooted at "root".
+// Should take time O(depth).
+node* find_max (node *root);
+
+// Finds the predecessor of the node "which".
+// If "which" is nullptr, or the minimum node,
+// should return nullptr.
+// Should take time O(depth).
+node* predecessor (node *which);
+
+// Finds the predecessor of the node "which".
+// If "which" is nullptr, or the maximum node,
+// should return nullptr.
+// Should take time O(depth).
+node* successor (node *which);
+
+
+// Finds the depth of the subtree rooted at "root".
+// If the tree is empty, should return -1.
+// Should take time O(n).
+int depth (node *root);
+
+// Finds the kth smallest node in the subtree rooted at "root".
+// If no such node exists, should return nullptr.
+// Should take time O(depth).
+node* find_by_rank (node *root, size_t k);
+
+
+
+// Print out the contents of the subtree rooted at "root".
+inline void print (node *root, std::ostream& out) {
+	node* curr = find_min (root);
+	out << "[";
+	bool first = 1;
+	while (curr) {
+		if (!first) {
+			out << ", ";
+		}
+		first = 0;
+		out << curr->value;
+		curr = successor (curr);
+	}
+	out << "]";
+}
+
+
+#endif /* TREE_H_ */
